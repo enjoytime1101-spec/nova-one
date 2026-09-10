@@ -1,0 +1,23 @@
+{
+  "profile": "nova-automation-task-0.1",
+  "id": "local-capacity-review",
+  "revision": 1,
+  "policy": {
+    "id": "local-evidence-policy",
+    "revision": 1,
+    "minIndependentSources": 2,
+    "maxAgeMs": 300000,
+    "allowedActions": ["record.append"]
+  },
+  "workflow": {
+    "subject": "did:example:local-operator",
+    "audience": "nova:local-review",
+    "purpose": "review-local-capacity-evidence",
+    "claims": ["capacity"],
+    "fixtures": [
+      { "id": "fixture-a", "independenceKey": "local-fixture-a", "payload": { "claims": { "capacity": 120 } } },
+      { "id": "fixture-b", "independenceKey": "local-fixture-b", "payload": { "claims": { "capacity": 120 } } }
+    ],
+    "action": { "type": "record.append", "parameters": { "record": { "decision": "record-local-review", "capacity": 120 } } }
+  }
+}

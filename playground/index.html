@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="description" content="Explore NOVA trust workflows locally in your browser. Run signed fixture evidence through verification, minimum context, an agent, policy and a tamper-evident receipt." />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'" />
+  <title>NOVA One — Proof Playground</title>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="./styles.css" />
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#workspace">Skip to the playground</a>
+  <header class="masthead">
+    <a class="wordmark" href="./" aria-label="NOVA One Playground"><span class="brand-symbol" aria-hidden="true">N</span><span>NOVA<span class="brand-one">ONE</span></span><span class="edition">PROOF PLAYGROUND</span></a>
+    <nav aria-label="Project"><a href="https://github.com/enjoytime1101-spec/nova-one/blob/main/docs/cli.md">CLI documentation <span aria-hidden="true">↗</span></a><a href="https://github.com/enjoytime1101-spec/nova-one">GitHub <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <main id="workspace">
+    <div class="page-heading"><div><p class="eyebrow">LOCAL EXECUTION / OPEN REFERENCE</p><h1>See what a proof proves.</h1><p class="intro">Follow the evidence from an input to a verifiable receipt.</p></div><div class="local-badge"><span class="status-dot"></span>Runs on your device<span>No API key · No uploads</span></div></div>
+    <aside class="boundary-note" aria-label="Demonstration boundary"><span class="tag">BROWSER PROOF DEMONSTRATION</span><p>Real WebCrypto Ed25519 signatures. Fictional source, deterministic fixture agent, ephemeral local keys. This does not run the Node.js kernel or attest to a real provider.</p></aside>
+    <ol class="flow" aria-label="Workflow stages">
+      <li data-stage="inputs"><span class="step-number">01</span><div><b>Inputs</b><small>Fictional source</small></div><span class="stage-state" aria-label="Ready">○</span></li>
+      <li data-stage="verify"><span class="step-number">02</span><div><b>Verify</b><small>Signature + time</small></div><span class="stage-state" aria-label="Ready">○</span></li>
+      <li data-stage="context"><span class="step-number">03</span><div><b>Minimum context</b><small>3 of 4 fields</small></div><span class="stage-state" aria-label="Ready">○</span></li>
+      <li data-stage="agent"><span class="step-number">04</span><div><b>Agent</b><small>Evidence-bound</small></div><span class="stage-state" aria-label="Ready">○</span></li>
+      <li data-stage="policy"><span class="step-number">05</span><div><b>Policy</b><small>Local action gate</small></div><span class="stage-state" aria-label="Ready">○</span></li>
+      <li data-stage="receipt"><span class="step-number">06</span><div><b>Receipt</b><small>Signed record</small></div><span class="stage-state" aria-label="Ready">○</span></li>
+    </ol>
+    <div class="workbench">
+      <section class="panel input-panel" aria-labelledby="inputs-title">
+        <div class="panel-heading"><h2 id="inputs-title">Configure a run</h2><span class="panel-index">01</span></div>
+        <form id="run-form">
+          <fieldset><legend>Evidence scenario</legend><div class="scenario-grid">
+            <label><input type="radio" name="scenario" value="verified" checked /><span>Valid evidence</span></label>
+            <label><input type="radio" name="scenario" value="tampered" /><span>Tampered input</span></label>
+            <label><input type="radio" name="scenario" value="expired" /><span>Expired evidence</span></label>
+            <label><input type="radio" name="scenario" value="denied" /><span>Policy denied</span></label>
+          </div></fieldset>
+          <p class="scenario-note" id="scenario-note">Both signatures pass. The requested amount is within the local policy limit.</p>
+          <div class="field-heading"><label for="source-input">Source payload</label><button class="text-button" id="reset-input" type="button">Reset example</button></div>
+          <textarea id="source-input" spellcheck="false" aria-describedby="input-help" rows="11"></textarea>
+          <p class="muted" id="input-help">Edit the fictional values. <code>privateContact</code> is excluded from the agent context. Keep real secrets out of examples.</p>
+          <div class="source-meta"><span>Source</span><b>Same-browser fixture</b><span>Audience</span><b>nova:playground</b><span>Purpose</span><b>procurement-review</b></div>
+          <button class="primary-button" id="run-button" type="submit"><span>Run workflow</span><span aria-hidden="true">↗</span></button>
+          <p id="run-status" class="status-line" role="status" aria-live="polite">Preparing the local proof engine…</p>
+          <p id="run-error" class="error-message" role="alert" hidden></p>
+        </form>
+      </section>
+      <section class="panel execution-panel" aria-labelledby="execution-title">
+        <div class="panel-heading"><h2 id="execution-title">Execution trace</h2><span class="live-label"><span class="status-dot"></span>LOCAL</span></div>
+        <div class="run-summary"><div><span class="eyebrow">WORKFLOW RESULT</span><h3 id="workflow-result">Ready to run</h3></div><span class="outcome-badge" id="outcome-badge">READY</span></div>
+        <div class="trace-block"><div class="trace-title"><span class="trace-icon">02</span><h3>Evidence verification</h3><span id="source-state" class="inline-state">Pending</span></div><p id="source-message">The source payload is signed with a new, local Ed25519 key.</p><dl class="compact-facts"><div><dt>Signature</dt><dd id="source-signature">—</dd></div><div><dt>Validity window</dt><dd id="source-expiry">5 minutes</dd></div></dl></div>
+        <div class="trace-block"><div class="trace-title"><span class="trace-icon gold">03</span><h3>Minimum context</h3><span id="context-count" class="inline-state">Pending</span></div><p>Only the fields required for the decision reach the fixture agent.</p><div id="context-fields" class="context-fields"><span class="muted">Waiting for accepted evidence.</span></div><p class="withheld"><span aria-hidden="true">⊘</span> <code>privateContact</code> stays out of the agent context. The downloaded bundle still contains the source inputs.</p></div>
+        <div class="trace-block"><div class="trace-title"><span class="trace-icon gold">04</span><h3>Agent output</h3><span class="inline-state">FIXTURE</span></div><blockquote id="agent-output">The agent waits for verified, scoped evidence.</blockquote><p class="evidence-note" id="agent-evidence">Deterministic local rule · No model or provider call</p></div>
+        <div class="trace-block policy-block"><div class="trace-title"><span class="trace-icon gold">05</span><h3>Policy decision</h3><span class="inline-state" id="policy-state">Pending</span></div><p id="policy-reason">A proposal cannot grant itself permission to act.</p><div class="action-label"><code>record.append</code><span id="action-effect">Browser memory only</span></div></div>
+      </section>
+      <aside class="panel receipt-panel" aria-labelledby="receipt-title">
+        <div class="panel-heading"><h2 id="receipt-title">Proof receipt</h2><span class="panel-index">06</span></div>
+        <div class="receipt-seal"><div class="seal-check" aria-hidden="true" id="receipt-symbol">○</div><h3 id="receipt-state">Waiting for a run</h3><p id="receipt-caption">A signed diagnostic receipt is produced even when a workflow is refused.</p></div>
+        <dl class="receipt-meta"><div><dt>Receipt ID</dt><dd id="receipt-id">—</dd></div><div><dt>Recorded at</dt><dd id="receipt-time">—</dd></div><div><dt>Source commitment / SHA-256</dt><dd id="receipt-hash" class="hash">—</dd></div><div><dt>Signer / Ed25519 public key</dt><dd id="receipt-key" class="hash">—</dd></div></dl>
+        <div class="receipt-actions"><button class="secondary-button" id="download-button" disabled>Download JSON <span aria-hidden="true">↓</span></button><button class="secondary-button" id="inspect-button" disabled>Verify this receipt <span aria-hidden="true">↙</span></button><button class="ghost-button" id="tamper-button" disabled>Tamper a copy</button></div>
+        <p class="receipt-scope">The included key verifies these bytes. It does not establish an issuer’s identity, source truth, or an external action. Private keys never leave memory.</p>
+      </aside>
+    </div>
+    <section class="panel verifier-panel" aria-labelledby="verifier-title">
+      <div class="panel-heading"><div><p class="eyebrow">INDEPENDENT LOCAL CHECK</p><h2 id="verifier-title">Bring the receipt back.</h2></div><span class="tag">NO UPLOAD</span></div>
+      <div class="verifier-grid"><div><div class="field-heading"><label for="receipt-json">Paste a browser demonstration bundle</label><label class="file-label" for="receipt-file">Open JSON file<input id="receipt-file" type="file" accept=".json,application/json" /></label></div><textarea id="receipt-json" rows="7" spellcheck="false" placeholder="Paste exported JSON here, or choose a file from your device." aria-describedby="verifier-help"></textarea><div class="verify-controls"><button class="primary-button compact" id="verify-button">Verify JSON locally <span aria-hidden="true">→</span></button><span id="file-name" class="muted"></span></div><p id="verifier-help" class="muted">Checks Ed25519 signatures, source binding, scoped context, expiry and the recorded policy. Runtime credentials use the CLI format instead.</p></div><div class="verification-result" id="verification-result" role="status" aria-live="polite"><span class="eyebrow">VERIFICATION RESULT</span><h3 id="verify-result-title">No bundle selected</h3><p id="verify-result-copy">Download a run, reopen it, and check the proof. A changed byte should fail.</p><ul id="verification-checks" class="verification-checks"></ul></div></div>
+    </section>
+    <section class="cli-section" aria-labelledby="cli-title"><div><p class="eyebrow">CONTINUE IN THE REFERENCE RUNTIME</p><h2 id="cli-title">A real CLI. A separate trust boundary.</h2><p>The Node.js runtime provides source adapters, scoped workflows and signed audit receipts. Its local demo is also fixture-tainted; this browser bundle is not a production credential.</p><a class="text-link" href="https://github.com/enjoytime1101-spec/nova-one/blob/main/docs/cli.md">Read commands and limitations <span aria-hidden="true">↗</span></a></div><div class="command-box"><div><span>Installed NOVA CLI</span><button id="copy-command" class="text-button">Copy</button></div><pre id="cli-command">nova-one init --issuer https://issuer.example
+nova-one demo
+nova-one status</pre><p>Use a fresh local state directory. Initialization creates local keys and shows an API token once.</p></div></section>
+    <footer><span>NOVA ONE <span class="footer-divider">/</span> Proof Playground</span><p>Cryptography can protect the record. It cannot make a claim true.</p><a href="https://github.com/enjoytime1101-spec/nova-one/blob/main/SECURITY.md">Security & limits ↗</a></footer>
+  </main>
+  <noscript><p class="noscript">Enable JavaScript to run the local WebCrypto demonstration. No data is uploaded.</p></noscript>
+</body>
+</html>

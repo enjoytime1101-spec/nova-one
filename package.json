@@ -1,0 +1,70 @@
+{
+  "name": "nova-one-digital-trust",
+  "version": "0.3.0",
+  "description": "Portable trust workflows with signed evidence, controlled local actions, MCP tools and a browser playground.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "nova-one": "./bin/nova-one.mjs",
+    "nova-one-mcp": "./agent-tools/mcp.mjs"
+  },
+  "exports": {
+    ".": "./src/index.mjs",
+    "./tool-contracts": "./agent-tools/tool-contracts.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "agent-tools",
+    "examples",
+    "scripts",
+    "skills",
+    "test",
+    "docs",
+    "README.md",
+    "LICENSE",
+    "NOTICE",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
+    "playground",
+    "workflows",
+    "automation"
+  ],
+  "scripts": {
+    "check": "node scripts/check.mjs",
+    "test": "node --test --test-concurrency=1 test/*.test.mjs",
+    "demo": "node examples/verified-workflow.mjs",
+    "start": "node bin/nova-one.mjs serve",
+    "pack:check": "node scripts/pack-check.mjs",
+    "test:mcp": "node --test --test-concurrency=1 test/mcp*.test.mjs",
+    "sbom": "node scripts/sbom.mjs",
+    "playground": "node playground/serve.mjs",
+    "release:build": "node scripts/release.mjs",
+    "test:package": "node scripts/package-smoke.mjs"
+  },
+  "keywords": [
+    "verifiable-credentials",
+    "ai-governance",
+    "agent-tools",
+    "audit",
+    "selective-disclosure"
+  ],
+  "dependencies": {
+    "@owf/identity-common": "0.3.2",
+    "@sd-jwt/core": "0.20.1",
+    "ipaddr.js": "2.2.0",
+    "shamir-secret-sharing": "0.0.4",
+    "@modelcontextprotocol/sdk": "1.30.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enjoytime1101-spec/nova-one.git"
+  },
+  "homepage": "https://enjoytime1101-spec.github.io/nova-one/",
+  "bugs": {
+    "url": "https://github.com/enjoytime1101-spec/nova-one/issues"
+  }
+}

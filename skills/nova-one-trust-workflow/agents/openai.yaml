@@ -1,0 +1,8 @@
+interface:
+  display_name: "NOVA One Trust Workflow"
+  short_description: "Verify evidence and gate controlled agent actions"
+  brand_color: "#2563EB"
+  default_prompt: "Use $nova-one-trust-workflow to preview my isolated local task, preserve its execution key, and verify the saved report without repeating the action."
+
+policy:
+  allow_implicit_invocation: true

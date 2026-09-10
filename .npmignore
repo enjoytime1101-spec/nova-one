@@ -1,0 +1,6 @@
+.nova/
+test/
+scripts/
+.github/
+*.tgz
+._*

@@ -1,0 +1,56 @@
+name: "Bug report"
+description: "Report reproducible incorrect behaviour without disclosing a vulnerability"
+title: "bug: "
+labels:
+  - "bug"
+body:
+  - type: "markdown"
+    attributes:
+      value: "For security vulnerabilities, use private vulnerability reporting under the Security tab. Do not include secrets or personal information."
+  - type: "input"
+    id: "version"
+    attributes:
+      label: "Version"
+      description: "Package version, commit, and Node.js version."
+    validations:
+      required: true
+  - type: "dropdown"
+    id: "surface"
+    attributes:
+      label: "Surface"
+      options:
+        - "CLI"
+        - "HTTP API"
+        - "JavaScript SDK"
+        - "Agent tool contract"
+        - "Credential or proof profile"
+        - "Documentation or Skill"
+        - "Other"
+    validations:
+      required: true
+  - type: "textarea"
+    id: "reproduction"
+    attributes:
+      label: "Reproduction"
+      description: "Provide a minimal synthetic example and the exact command or request."
+    validations:
+      required: true
+  - type: "textarea"
+    id: "expected"
+    attributes:
+      label: "Expected behaviour"
+    validations:
+      required: true
+  - type: "textarea"
+    id: "actual"
+    attributes:
+      label: "Actual behaviour"
+    validations:
+      required: true
+  - type: "checkboxes"
+    id: "safety"
+    attributes:
+      label: "Safety check"
+      options:
+        - label: "I removed private keys, tokens, personal information, and live provider data."
+          required: true

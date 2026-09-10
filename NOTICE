@@ -1,0 +1,26 @@
+NOVA One Digital Trust Infrastructure
+Copyright 2026 NOVA One contributors
+
+This product includes software developed by NOVA One contributors.
+
+NOVA One is an independent open-source project. References to standards,
+regulators, governments, or vendors do not imply endorsement, certification,
+conformance, or affiliation.
+
+- @modelcontextprotocol/sdk 1.30.0, Copyright Model Context Protocol contributors,
+  MIT license.
+
+Runtime dependencies are redistributed under their respective licenses:
+
+- @sd-jwt/core 0.20.1, Copyright OpenWallet Foundation contributors,
+  Apache-2.0 license.
+- @owf/identity-common 0.3.2, Copyright OpenWallet
+  Foundation contributors, Apache-2.0 license.
+- ipaddr.js 2.2.0, Copyright (C) 2011-2017 whitequark, MIT license.
+- shamir-secret-sharing 0.0.4, Copyright Privy contributors, Apache-2.0 license.
+
+The distributed package contains the complete dependency inventory, dependency
+graph, licenses and registry-integrity-derived SHA-512 hashes in
+docs/sbom.cdx.json. The public source distribution also contains
+package-lock.json. License texts remain available in each installed dependency
+and its upstream source distribution.

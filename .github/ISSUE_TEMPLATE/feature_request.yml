@@ -1,0 +1,35 @@
+name: "Feature request"
+description: "Propose a scoped capability or interoperability improvement"
+title: "proposal: "
+labels:
+  - "enhancement"
+body:
+  - type: "textarea"
+    id: "problem"
+    attributes:
+      label: "Problem"
+      description: "Describe the user or interoperability problem without prescribing a solution."
+    validations:
+      required: true
+  - type: "textarea"
+    id: "outcome"
+    attributes:
+      label: "Desired outcome"
+    validations:
+      required: true
+  - type: "textarea"
+    id: "boundaries"
+    attributes:
+      label: "Trust boundaries"
+      description: "Identify external calls, side effects, credentials, sensitive data, approvals, and claims."
+    validations:
+      required: true
+  - type: "textarea"
+    id: "standards"
+    attributes:
+      label: "Standards or profiles"
+      description: "Link normative specifications and distinguish custom extensions from conformance."
+  - type: "textarea"
+    id: "alternatives"
+    attributes:
+      label: "Alternatives considered"

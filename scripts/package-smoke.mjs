@@ -1,0 +1,53 @@
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const stage = fs.mkdtempSync(path.join(os.tmpdir(), 'nova-package-smoke-'));
+const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+const manifest = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
+const command = (file, args, cwd = root) => execFileSync(file, args, { cwd, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 });
+try {
+  const pack = JSON.parse(command(npm, ['pack', '--ignore-scripts', '--json', '--pack-destination', stage]))[0];
+  const names = pack.files.map(file => file.path);
+  for (const required of ['bin/nova-one.mjs', 'agent-tools/mcp.mjs', 'automation/runner.mjs', 'workflows/local-record.json', 'skills/nova-one-trust-workflow/SKILL.md', 'playground/index.html', 'docs/sbom.cdx.json']) assert(names.includes(required), `Missing packaged file: ${required}`);
+  for (const name of names) assert(!/(?:^|\/)(?:node_modules|\.git|\.nova|\.env|state\.json|keys\.json|config\.json|artifacts)(?:\/|$)/.test(name), `Unsafe packaged path: ${name}`);
+  command(npm, ['install', '--prefix', stage, '--ignore-scripts', '--no-audit', '--no-fund', path.join(stage, pack.filename)], stage);
+  const installed = path.join(stage, 'node_modules', manifest.name);
+  const cli = path.join(installed, 'bin/nova-one.mjs');
+  const home = path.join(stage, 'private-home');
+  const task = path.join(installed, 'workflows/local-record.json');
+  const report = path.join(stage, 'report.json');
+  const call = args => JSON.parse(command(process.execPath, [cli, ...args, '--home', home], stage));
+  call(['init', '--issuer', 'https://package-test.example']);
+  const keyBytes = fs.readFileSync(path.join(home, 'keys.json'));
+  call(['init']);
+  assert.deepEqual(fs.readFileSync(path.join(home, 'keys.json')), keyBytes, 'Repeated init changed the key');
+  const before = fs.readFileSync(path.join(home, 'state.json'));
+  const preview = call(['automation', '--file', task]);
+  assert.equal(preview.actionExecuted, false);
+  assert.deepEqual(fs.readFileSync(path.join(home, 'state.json')), before, 'Dry run changed persisted state');
+  const first = call(['automation', '--file', task, '--execute', '--run-key', 'package-install', '--out', report]);
+  assert.equal(first.verification.verified, true);
+  const second = call(['automation', '--file', task, '--execute', '--run-key', 'package-install']);
+  assert.equal(second.actionReceipt.actionId, first.actionReceipt.actionId, 'Retry repeated the action');
+  const stateBeforeVerify = fs.readFileSync(path.join(home, 'state.json'));
+  assert.equal(call(['automation', 'verify', '--file', report, '--task', task, '--run-key', 'package-install']).verified, true);
+  assert.deepEqual(fs.readFileSync(path.join(home, 'state.json')), stateBeforeVerify, 'Verification wrote state');
+  const tampered = JSON.parse(fs.readFileSync(report, 'utf8'));
+  tampered.actionReceipt.actor = 'did:example:tampered';
+  fs.writeFileSync(report, JSON.stringify(tampered));
+  const rejected = spawnSync(process.execPath, [cli, 'automation', 'verify', '--file', report, '--task', task, '--run-key', 'package-install', '--home', home], { cwd: stage, encoding: 'utf8' });
+  assert.notEqual(rejected.status, 0, 'Tampered report was accepted');
+  assert.match(command(process.execPath, [path.join(installed, 'agent-tools/mcp.mjs'), '--help'], stage), /MCP|stdio/);
+  const tests = fs.readdirSync(path.join(installed, 'test')).filter(name => name.endsWith('.test.mjs')).map(name => path.join(installed, 'test', name));
+  const results = command(process.execPath, ['--test', '--test-concurrency=1', ...tests], stage);
+  const summary = results.split('\n').filter(line => /^(?:# |ℹ )(?:tests|pass|fail|duration_ms)/.test(line));
+  console.log(summary.join('\n'));
+  console.log(`PASS installed ${pack.filename}: package contents, repeat init, dry-run, execute, idempotent retry, read-only verify, tamper rejection, MCP help and all installed tests (${names.length} files).`);
+} finally {
+  fs.rmSync(stage, { recursive: true, force: true });
+}
