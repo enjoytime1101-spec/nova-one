@@ -55,7 +55,7 @@
   "dependencies": {
     "@owf/identity-common": "0.3.2",
     "@sd-jwt/core": "0.20.1",
-    "ipaddr.js": "2.2.0",
+    "ipaddr.js": "2.5.0",
     "shamir-secret-sharing": "0.0.4",
     "@modelcontextprotocol/sdk": "1.30.0"
   },
