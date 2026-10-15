@@ -57,7 +57,7 @@
     "@sd-jwt/core": "0.20.1",
     "ipaddr.js": "2.2.0",
     "shamir-secret-sharing": "0.0.4",
-    "@modelcontextprotocol/sdk": "1.30.0"
+    "@modelcontextprotocol/sdk": "1.32.1"
   },
   "repository": {
     "type": "git",
