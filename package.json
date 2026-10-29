@@ -53,7 +53,7 @@
     "selective-disclosure"
   ],
   "dependencies": {
-    "@owf/identity-common": "0.3.2",
+    "@owf/identity-common": "0.6.0",
     "@sd-jwt/core": "0.20.1",
     "ipaddr.js": "2.2.0",
     "shamir-secret-sharing": "0.0.4",
